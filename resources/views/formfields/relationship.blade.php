@@ -62,36 +62,43 @@
                 <p>{{ __('voyager::generic.no_results') }}</p>
             @endif
 
-        @elseif($options->type == 'hasMany')
+            @elseif($options->type == 'hasMany')
 
             @if(isset($view) && ($view == 'browse' || $view == 'read'))
 
                 @php
                     $relationshipData = (isset($data)) ? $data : $dataTypeContent;
                     $model = app($options->model);
-
-                    $selected_values = $model::where($options->column, '=', $relationshipData->{$options->key})->get()->map(function ($item, $key) use ($options) {
-                        return $item->{$options->label};
-                    })->all();
+                    $selected_values = $model::where($options->column, '=', $relationshipData->{$options->key})->get();
                 @endphp
 
                 @if($view == 'browse')
-                    @php
-                        $string_values = implode(", ", $selected_values);
-                        if(mb_strlen($string_values) > 25){ $string_values = mb_substr($string_values, 0, 25) . '...'; }
-                    @endphp
                     @if(empty($selected_values))
                         <p>{{ __('voyager::generic.no_results') }}</p>
                     @else
+                        @php
+                            $string_values = $selected_values->pluck($options->label)->join(",");
+                            if(mb_strlen($string_values) > 25){ $string_values = mb_substr($string_values, 0, 25) . '...'; }
+                        @endphp
                         <p>{{ $string_values }}</p>
                     @endif
                 @else
                     @if(empty($selected_values))
                         <p>{{ __('voyager::generic.no_results') }}</p>
                     @else
+                        @php
+                            $primaryKey = $model->getKeyName();
+                            $relationDataType = Voyager::model('DataType')->where('model_name', $options->model)->first('slug');
+                        @endphp
                         <ul>
                             @foreach($selected_values as $selected_value)
-                                <li>{{ $selected_value }}</li>
+                                <li>
+                                    @if(empty($relationDataType))
+                                        {{ $selected_value->{$options->label} }}
+                                    @else
+                                        <a href="../{{ $relationDataType->slug }}/{{ $selected_value->{$primaryKey} }}">{{ $selected_value->{$options->label} }}</a>
+                                    @endif
+                                </li>
                             @endforeach
                         </ul>
                     @endif
@@ -102,12 +109,20 @@
                 @php
                     $model = app($options->model);
                     $query = $model::where($options->column, '=', $dataTypeContent->{$options->key})->get();
+                    $primaryKey = $model->getKeyName();
+                    $relationDataType = Voyager::model('DataType')->where('model_name', $options->model)->first('slug');
                 @endphp
 
                 @if($query->isNotEmpty())
                     <ul>
                         @foreach($query as $query_res)
-                            <li>{{ $query_res->{$options->label} }}</li>
+                            <li>
+                                @if(empty($relationDataType))
+                                    {{ $query_res->{$options->label} }}
+                                @else
+                                    <a target="_blank" href="../../{{ $relationDataType->slug }}/{{ $query_res->{$primaryKey} }}">{{ $query_res->{$options->label} }}</a>
+                                @endif
+                            </li>
                         @endforeach
                     </ul>
                 @else
