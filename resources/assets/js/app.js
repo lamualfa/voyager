@@ -135,13 +135,15 @@ $(document).ready(function () {
         "dom": '<"top"fl<"clear">>rt<"bottom"ip<"clear">>'
     });
 
-    $(".side-menu .nav .dropdown").on('show.bs.collapse', function () {
+    let openedSidebarDropdown
+
+    $(".side-menu .nav .dropdown").on('show.bs.collapse', function (e) {
+        openedSidebarDropdown = e.target
         return $(".side-menu .nav .dropdown .collapse").collapse('hide');
     });
-
+    
     $('.panel-collapse').on('hide.bs.collapse', function(e) {
-        var target = $(e.target);
-        if(target.has('.collapsed').length > 0){
+        if($(e.target).has(openedSidebarDropdown).length){
             e.stopPropagation();
             e.preventDefault();
         }
