@@ -141,14 +141,10 @@ $(document).ready(function () {
 
     $('.panel-collapse').on('hide.bs.collapse', function(e) {
         var target = $(e.target);
-        if (!target.is('a')) {
-            target = target.parent();
+        if(target.has('.collapsed').length > 0){
+            e.stopPropagation();
+            e.preventDefault();
         }
-        if (!target.hasClass('collapsed')) {
-            return;
-        }
-        e.stopPropagation();
-        e.preventDefault();
     });
 
     $(document).on('click', '.panel-heading a.panel-action[data-toggle="panel-collapse"]', function (e) {
