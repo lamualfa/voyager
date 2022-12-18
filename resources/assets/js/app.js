@@ -135,15 +135,20 @@ $(document).ready(function () {
         "dom": '<"top"fl<"clear">>rt<"bottom"ip<"clear">>'
     });
 
-    let openedSidebarDropdown
+    let openedSidebarDropdown;
 
-    $(".side-menu .nav .dropdown").on('show.bs.collapse', function (e) {
-        openedSidebarDropdown = e.target
-        return $(".side-menu .nav .dropdown .collapse").collapse('hide');
+    $(".side-menu .nav .dropdown").on("show.bs.collapse", function (e) {
+        openedSidebarDropdown = e.target;
+        return $(".side-menu .nav .dropdown .collapse").collapse("hide");
     });
-    
-    $('.panel-collapse').on('hide.bs.collapse', function(e) {
-        if($(e.target).has(openedSidebarDropdown).length){
+
+    $(".panel-collapse").on("hide.bs.collapse", function (e) {
+        let $target = $(e.target);
+        if (
+            $target.has(openedSidebarDropdown).length &&
+            ($target.parent('.collapse[aria-expanded="true"]').length ||
+                $target.find('.collapse[aria-expanded="false"]').length)
+        ) {
             e.stopPropagation();
             e.preventDefault();
         }
