@@ -27,7 +27,7 @@
                                         @include($dataRow->details->view_order, ['row' => $dataRow, 'dataType' => $dataType, 'dataTypeContent' => $result, 'view' => 'order', 'content' => $result->{$display_column}])
                                     @elseif (isset($dataRow->details->view))
                                         @include($dataRow->details->view, ['row' => $dataRow, 'dataType' => $dataType, 'dataTypeContent' => $result, 'content' => $result->{$display_column}, 'action' => 'order'])
-                                    @elseif($dataRow->type == 'image')
+                                    @elseif(isset($dataRow->type) && $dataRow->type == 'image')
                                         <span>
                                             <img src="@if( !filter_var($result->{$display_column}, FILTER_VALIDATE_URL)){{ Voyager::image( $result->{$display_column} ) }}@else{{ $result->{$display_column} }}@endif" style="height:100px">
                                         </span>
