@@ -11,11 +11,23 @@
                 @php
                     $relationshipData = isset($data) ? $data : $dataTypeContent;
                     $model = app($options->model);
-                    $query = $model::where($options->key, $relationshipData->{$options->column})->first();
+                    $primaryKey = $model->getKeyName();
+                    $relationDataType = Voyager::model('DataType')
+                        ->where('model_name', $options->model)
+                        ->first(['slug']);
+                    
+                    $row = $model::where($options->key, $relationshipData->{$options->column})->first();
                 @endphp
 
-                @if (isset($query))
-                    <p>{{ $query->{$options->label} }}</p>
+                @if (isset($row))
+                    <p>
+                        @if (empty($relationDataType))
+                            {{ $row->{$options->label} }}
+                        @else
+                            <a
+                                href="{{ $view === 'browse' ? '.' : '..' }}/{{ $relationDataType->slug }}/{{ $row->{$primaryKey} }}">{{ $row->{$options->label} }}</a>
+                        @endif
+                    </p>
                 @else
                     <p>{{ __('voyager::generic.no_results') }}</p>
                 @endif
