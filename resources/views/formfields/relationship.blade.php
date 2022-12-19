@@ -155,37 +155,43 @@
 
                 @php
                     $relationshipData = isset($data) ? $data : $dataTypeContent;
-                    
-                    $selected_values = isset($relationshipData)
-                        ? $relationshipData
-                            ->belongsToMany($options->model, $options->pivot_table, $options->foreign_pivot_key ?? null, $options->related_pivot_key ?? null, $options->parent_key ?? null, $options->key)
-                            ->get()
-                            ->map(function ($item, $key) use ($options) {
-                                return $item->{$options->label};
-                            })
-                            ->all()
-                        : [];
+                    $rows = isset($relationshipData) ? $relationshipData->belongsToMany($options->model, $options->pivot_table, $options->foreign_pivot_key ?? null, $options->related_pivot_key ?? null, $options->parent_key ?? null, $options->key)->get() : [];
                 @endphp
 
                 @if ($view == 'browse')
-                    @php
-                        $string_values = implode(', ', $selected_values);
-                        if (mb_strlen($string_values) > 25) {
-                            $string_values = mb_substr($string_values, 0, 25) . '...';
-                        }
-                    @endphp
-                    @if (empty($selected_values))
+                    @if (empty($rows))
                         <p>{{ __('voyager::generic.no_results') }}</p>
                     @else
-                        <p>{{ $string_values }}</p>
+                        @php
+                            $labels = $rows->pluck($options->label)->join(',');
+                            if (mb_strlen($labels) > 25) {
+                                $labels = mb_substr($labels, 0, 25) . '...';
+                            }
+                        @endphp
+                        <p>{{ $labels }}</p>
                     @endif
                 @else
-                    @if (empty($selected_values))
+                    @if (empty($rows))
                         <p>{{ __('voyager::generic.no_results') }}</p>
                     @else
+                        @php
+                            $model = app($options->model);
+                            $primaryKey = $model->getKeyName();
+                            $relationDataType = Voyager::model('DataType')
+                                ->where('model_name', $options->model)
+                                ->first(['slug']);
+                        @endphp
+
                         <ul>
-                            @foreach ($selected_values as $selected_value)
-                                <li>{{ $selected_value }}</li>
+                            @foreach ($rows as $row)
+                                <li>
+                                    @if (empty($relationDataType))
+                                        {{ $row->{$options->label} }}
+                                    @else
+                                        <a
+                                            href="../{{ $relationDataType->slug }}/{{ $row->{$primaryKey} }}">{{ $row->{$options->label} }}</a>
+                                    @endif
+                                </li>
                             @endforeach
                         </ul>
                     @endif
