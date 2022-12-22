@@ -213,7 +213,7 @@
                                         @php
                                             $options = clone $fieldOptions;
                                             $modelName = $dataType->model_name ?? $model_name;
-                                            if (class_exists($modelName)) {
+                                            if (class_exists($modelName, false)) {
                                                 $model = app($modelName);
                                                 if (isset($model->additional_attributes)) {
                                                     foreach ($model->additional_attributes as $attribute) {
