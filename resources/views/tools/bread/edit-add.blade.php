@@ -212,8 +212,8 @@
                                         <option value="">-- {{ __('voyager::generic.none') }} --</option>
                                         @php
                                             $options = clone $fieldOptions;
-                                            if (!empty($dataType)) {
-                                                $modelName = $dataType->model_name;
+                                            $modelName = $dataType->model_name ?? $model_name;
+                                            if (isset($modelName)) {
                                                 $model = app($modelName);
                                                 if (isset($model->additional_attributes)) {
                                                     foreach ($model->additional_attributes as $attribute) {
