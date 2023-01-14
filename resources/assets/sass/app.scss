@@ -728,7 +728,7 @@ a:hover {
   padding-right: 0;
 }
 .app-container.expanded .side-body {
-  margin-left: 235px; }
+  margin-left: calc(var(--voyager-sidebar-width, 250px) + 15px); }
 /* small screen */
 @media (max-width: 768px) {
   .navbar {
