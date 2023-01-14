@@ -474,7 +474,7 @@ a:hover {
   padding: 0;
   margin: 0; }
 .navbar .dropdown-menu .notifications.list-group .list-group-item {
-  min-width: 250px;
+  min-width: var(--voyager-sidebar-width, 250px);
   padding: 8px;
   border: 0;
   border-bottom: 1px solid #EEE; }
@@ -618,7 +618,7 @@ a:hover {
 .app-container .content-container .side-menu .navbar-nav .panel-collapse.in {
   display: none; }
 .app-container .content-container .side-menu:hover {
-  width: 250px; }
+  width: var(--voyager-sidebar-width, 250px); }
 .app-container .content-container .side-menu:hover .navbar-header .navbar-brand .title {
   display: inline-block; }
 .app-container .content-container .side-menu:hover .navbar-nav li a .title {
@@ -642,15 +642,15 @@ a:hover {
   padding-top: 84px; }
 
 .app-container.expanded .app-footer {
-  left: 250px; }
+  left: var(--voyager-sidebar-width, 250px); }
 .app-container.expanded .app-footer .wrapper {
   padding-left: 25px; }
 
 .app-container.expanded .content-container .navbar-top {
-  padding-left: 250px; }
+  padding-left: var(--voyager-sidebar-width, 250px); }
 
 .app-container.expanded .content-container .side-menu {
-  width: 250px; }
+  width: var(--voyager-sidebar-width, 250px); }
 .app-container.expanded .content-container .side-menu .navbar-header .navbar-brand .title {
   display: inline-block; }
 .app-container.expanded .content-container .side-menu .navbar-nav li a .title {
@@ -757,7 +757,7 @@ a:hover {
   .app-container .navbar-top {
     min-width: 300px; }
   .app-container .content-container .side-menu {
-    margin-left: -250px;
+    margin-left: calc(var(--voyager-sidebar-width, 250px) * -1);
     width: 0; }
   .app-container .content-container .side-body {
     margin-left: 10px; }
@@ -766,7 +766,7 @@ a:hover {
     padding-left: 0; }
   .app-container.expanded .side-menu {
     margin-left: 0;
-    width: 250px; }
+    width: var(--voyager-sidebar-width, 250px); }
   .app-container.expanded .side-body {
     margin-left: 10px; }
   .app-container .app-footer .wrapper, .app-container.expanded .app-footer .wrapper {
@@ -1204,9 +1204,9 @@ table.dataTable.no-footer{
   border-top-right-radius: 0; }
 .step.tabs-left .nav-tabs > li {
   border-right: 0;
-  min-width: 250px;
+  min-width: var(--voyager-sidebar-width, 250px);
   display: table;
-  width: 250px; }
+  width: var(--voyager-sidebar-width, 250px); }
 .step.tabs-left .nav-tabs > li > a {
   margin-right: 0;
   display: table-cell;
