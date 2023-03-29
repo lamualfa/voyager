@@ -21,7 +21,7 @@ class CreateTranslationsTable extends Migration
             $table->integer('foreign_key')->unsigned();
             $table->string('locale');
 
-            $table->text('value');
+            $table->mediumText('value');
 
             $table->unique(['table_name', 'column_name', 'foreign_key', 'locale']);
 
