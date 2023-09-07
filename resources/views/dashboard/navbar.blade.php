@@ -7,8 +7,11 @@
             @section('breadcrumbs')
             <ol class="breadcrumb hidden-xs">
                 @php
-                $segments = array_filter(explode('/', str_replace(route('voyager.dashboard'), '', Request::url())));
-                $url = route('voyager.dashboard');
+                  $url = route('voyager.dashboard');
+                  $currentUrl = Illuminate\Support\Facades\Request::url();
+                  $dashboardUrlPath = parse_url($url, PHP_URL_PATH);
+                  $currentUrlPath = parse_url($currentUrl, PHP_URL_PATH);
+                  $segments = array_filter(explode('/', str_replace($dashboardUrlPath, '', $currentUrlPath)));
                 @endphp
                 @if(count($segments) == 0)
                     <li class="active"><i class="voyager-boat"></i> {{ __('voyager::generic.dashboard') }}</li>
